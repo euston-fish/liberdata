@@ -20,7 +20,9 @@ defmodule LiberdataWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", LiberdataWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", LiberdataWeb do
+    pipe_through :api
+
+    get "/decode/:url", ApiController, :decode
+  end
 end
