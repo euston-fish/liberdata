@@ -7,6 +7,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.WorkbookFactory
+import java.io.File
 import java.io.FileInputStream
 
 fun parseFile(path: String): JsonElement {
@@ -47,16 +48,16 @@ fun main(args: Array<String>) {
     if (input == null) {
       return
     }
-    val result = JsonObject()
+    val inFile = input
+    val outFile = input + "-out.json"
     try {
-      val elem = parseFile(input)
-      result.add("data", elem)
-      result.addProperty("success", true)
+      val elem = parseFile(inFile)
+      File(outFile).bufferedWriter().use {
+        it.write(Gson().toJson(elem))
+      }
+      println("ok")
     } catch (error: Exception) {
-      result.addProperty("success", false)
-      result.addProperty("error", error.message)
-    } finally {
-      println(Gson().toJson(result))
+      println(error.message?.replace("\n", " "))
     }
   }
 }
