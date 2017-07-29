@@ -3,8 +3,8 @@ defmodule Liberdata.Decoder do
   def decode(_, unknown_type), do: {:err, "Unknown type #{unknown_type}"}
 
   def decode_csv(url) do
-    stream = case download(url) do
-      {:ok, resp} -> resp.body
+    stream = case get_by_url(url) do
+      {:ok, body} -> body
       error -> throw error
     end
     |> String.split("\n")
@@ -28,8 +28,20 @@ defmodule Liberdata.Decoder do
     {:ok, %Liberdata.Table{headers: headers, rows: rows}}
   end
 
-  def download(url) do
-    HTTPoison.get(url)
+  def get_by_url(url) do
+    cache_location = Application.get_env(:liberdata, :cache_location)
+    File.mkdir_p cache_location
+    local_path = cache_location <> "/" <> String.replace(url, "/", "_")
+    if File.exists? local_path do
+      File.read(local_path)
+    else
+      case HTTPoison.get(url) do
+        {:ok, resp} ->
+          File.write(local_path, resp.body)
+          {:ok, resp.body}
+        error -> error
+      end
+    end
   end
 
   def convert_type(string) do
