@@ -38,9 +38,11 @@ defmodule Liberdata.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:amf, git: "https://github.com/sile/erl-amf.git", tag: "0.1.4"},
+      {:amf, git: "https://github.com/sile/erl-amf.git", tag: "v0.1.3", override: true},
+      {:rtmpmsg, git: "https://github.com/sile/erl-rtmpmsg.git", tag: "v0.2.10"},
       {:httpoison, "~> 0.12.0"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:csv, "~> 2.0.0"}
     ]
   end
 end
