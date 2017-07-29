@@ -6,4 +6,8 @@ defmodule Liberdata.CommandDocs do
           code code code
           ```
           """)
+
+  command(:foo, """
+          anything in here
+          """)
 end

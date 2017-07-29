@@ -24,7 +24,7 @@ defmodule Liberdata.Commands do
     IO.inspect commands
 
     html = Enum.map(commands, &format_command/1)
-    |> Enum.join("---")
+    |> Enum.join("---\n")
     |> Earmark.as_html!
 
     quote do
@@ -36,9 +36,11 @@ defmodule Liberdata.Commands do
 
   def format_command(command) do
     """
-    # `#{command.name}`
+    # [`#{command.name}`](##{command.name})
+    {: ##{command.name} }
 
     #{command.docs}
+    </div>
     """
   end
 end
