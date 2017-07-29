@@ -29,7 +29,7 @@ defmodule Liberdata.Decoder do
   end
 
   def get_by_url(url) do
-    cache_location = App.get_environment(:liberdata, :cache_location)
+    cache_location = Application.get_env(:liberdata, :cache_location)
     File.mkdir_p cache_location
     local_path = cache_location <> "/" <> String.replace(url, "/", "_")
     if File.exists? local_path do
