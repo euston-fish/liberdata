@@ -23,8 +23,6 @@ defmodule LiberdataWeb.Router do
   scope "/api", LiberdataWeb do
     pipe_through :api
 
-    get "/decode/:url", ApiController, :decode
-    get "/decode/:type/:url", ApiController, :decode_known_type
-    get "/decode/:type/:url/:filter", ApiController, :decode_known_type
+    get "/*commands", ApiController, :decode
   end
 end

@@ -1,33 +1,17 @@
 defmodule LiberdataWeb.ApiController do
   use LiberdataWeb, :controller
 
-  alias Liberdata.{Decoder, Masseuse}
+  alias Liberdata.{Applicator}
 
-  def decode(conn, _params = %{"url" => url}) do
-    json conn, %{url: url}
-  end
-
-  def decode_known_type(conn, params = %{"type" => type, "url" => url}) do
-    {status, resp} = Decoder.decode(url, type)
-    |> case do
-      {:ok, stream} ->
-        {200, stream}
-      {:err, message} ->
-        resp = %{
-          "error" => message
-        }
-        {500, resp}
+  def decode(conn, _params = %{"commands" => commands}) do
+    {status, resp} = Applicator.apply(commands, []) |> case do
+      {:ok, resp} -> {200, resp}
+      {:err, message} -> {500, %{error: message}}
+      _ -> {500, %{error: "cri"}}
     end
 
-    resp = case params do
-      %{"filter" => filter} -> resp |> Masseuse.apply(filter)
-      _ -> resp
-    end
-    put_status(conn, status)
+    conn
+    |> put_status(status)
     |> json(resp)
-  end
-
-  def decode_known_type(conn, _params) do
-    json conn, %{"error" => "unknown format"}
   end
 end

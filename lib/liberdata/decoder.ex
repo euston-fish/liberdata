@@ -17,7 +17,7 @@ defmodule Liberdata.Decoder do
     end)
     |> Stream.filter(fn line -> line != nil end)
 
-    headers = List.to_tuple(Enum.map(Enum.at(stream, 0), &String.trim/1))
+    headers = List.to_tuple(Enum.at(stream, 0))
     rows = stream
     |> Stream.drop(1)
     |> Stream.map(fn row -> # maybe we get rid of this and push it into a Masseuse step?
