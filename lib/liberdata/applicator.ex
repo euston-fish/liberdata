@@ -7,7 +7,7 @@ defmodule Liberdata.Applicator do
     apply([table | rest], state)
   end
 
-  def apply([table = %Table{}, "filter" | rest], state) do
+  def apply([table = %Table{}, "filter", key | rest], state) do
     {f, rest} = filter(rest, state)
     apply([Masseuse.filter(table, key, f) | rest], state)
   end
@@ -24,9 +24,9 @@ defmodule Liberdata.Applicator do
     {:err, "bad command sequence"}
   end
 
-  def filter([key, "=", value | rest], _), do: {&(&1==value), rest}
-  def filter([key, "<", value | rest], _), do: {&(&1<value), rest}
-  def filter([key, ">", value | rest], _), do: {&(&1>value), rest}
-  def filter([key, "<=", value | rest], _), do: {&(&1<=value), rest}
-  def filter([key, ">=", value | rest], _), do: {&(&1>=value), rest}
+  def filter(["=", value | rest], _), do: {&(&1==value), rest}
+  def filter(["<", value | rest], _), do: {&(&1<value), rest}
+  def filter([">", value | rest], _), do: {&(&1>value), rest}
+  def filter(["<=", value | rest], _), do: {&(&1<=value), rest}
+  def filter([">=", value | rest], _), do: {&(&1>=value), rest}
 end
