@@ -8,7 +8,7 @@ defmodule Liberdata.Applicator do
   end
 
   def apply([rows = %Rows{}, "filter" | rest], state) do
-    {f, rest} = filter(rest, state)
+    {f, rest} = filter(["or" | rest])
     apply([Rows.filter(rows, f) | rest], state)
   end
 
@@ -17,11 +17,15 @@ defmodule Liberdata.Applicator do
     |> Rows.map(fn %Row{data: data} ->
       {_, data} = Map.get_and_update(data, key, fn
         nil -> :pop
-        value -> {String.trim(value), String.trim(value)}
+        value -> {nil, String.trim(value)}
       end)
       %Row{data: data}
     end)
     apply([rows | rest], state)
+  end
+
+  def apply([%Rows{rows: rows}, "count"], _) do
+    {:ok, Enum.count(rows)}
   end
 
   def apply([rows = %Rows{}], _) do
@@ -32,9 +36,12 @@ defmodule Liberdata.Applicator do
     {:err, "bad command sequence"}
   end
 
-  def filter([key, "=", value | rest], _), do: {&(Row.get(&1, key)==value), rest}
-  def filter([key, "<", value | rest], _), do: {&(Row.get(&1, key)<value), rest}
-  def filter([key, ">", value | rest], _), do: {&(Row.get(&1, key)>value), rest}
-  def filter([key, "<=", value | rest], _), do: {&(Row.get(&1, key)<=value), rest}
-  def filter([key, ">=", value | rest], _), do: {&(Row.get(&1, key)>=value), rest}
+  for operator <- [:==, :<, :>, :<=, :>=] do
+    IO.puts "Compiling #{operator}"
+    defp filter(["or", key, unquote(Atom.to_string(operator)), value | rest]) do
+      {f, rest} = filter(rest)
+      {&(apply(Kernel, unquote(operator), [Row.get(&1, key), value]) or f.(&1)), rest}
+    end
+  end
+  defp filter(rest), do: {fn _ -> false end, rest}
 end
