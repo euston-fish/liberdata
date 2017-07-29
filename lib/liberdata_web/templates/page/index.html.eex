@@ -12,3 +12,7 @@
   Utilise any data source with ease through Liberdata. Concerns about file formats, parsing, and processing are a thing of the past.
   Liberdata acts as an intelligent proxy for many different forms of data.
 </div>
+
+<div class="documentation">
+  <%= Phoenix.HTML.raw Liberdata.CommandDocs.documentation() %>
+</div> 

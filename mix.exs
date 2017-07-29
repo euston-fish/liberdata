@@ -43,7 +43,8 @@ defmodule Liberdata.Mixfile do
       {:httpoison, "~> 0.12.0"},
       {:poison, "~> 3.1"},
       {:csv, "~> 1.4"},
-      {:briefly, "~> 0.3"}
+      {:briefly, "~> 0.3"},
+      {:earmark, "~> 1.2.2"}
     ]
   end
 end
