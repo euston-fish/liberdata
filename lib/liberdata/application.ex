@@ -11,7 +11,7 @@ defmodule Liberdata.Application do
       # Start the endpoint when the application starts
       supervisor(LiberdataWeb.Endpoint, []),
       # Start your own worker by calling: Liberdata.Worker.start_link(arg1, arg2, arg3)
-      # worker(Liberdata.Worker, [arg1, arg2, arg3]),
+      worker(Liberdata.XLSService, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

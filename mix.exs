@@ -42,7 +42,8 @@ defmodule Liberdata.Mixfile do
       {:rtmpmsg, git: "https://github.com/sile/erl-rtmpmsg.git", tag: "v0.2.10"},
       {:httpoison, "~> 0.12.0"},
       {:poison, "~> 3.1"},
-      {:csv, "~> 2.0.0"}
+      {:csv, "~> 1.4"},
+      {:briefly, "~> 0.3"}
     ]
   end
 end
