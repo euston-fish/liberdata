@@ -1,5 +1,5 @@
 defmodule Liberdata.Decoder do
-  def decode(url, type), do: decode_csv(url)
+  def decode(url, "csv"), do: decode_csv(url)
   def decode(_, unknown_type), do: {:err, "Unknown type #{unknown_type}"}
 
   def decode_csv(url) do
@@ -15,17 +15,15 @@ defmodule Liberdata.Decoder do
     end)
     |> Stream.filter(fn line -> line != nil end)
 
-    [headers] = Enum.take(stream, 1)
-    result = stream
+    headers = List.to_tuple(Enum.map(Enum.at(stream, 0), &String.trim/1))
+    rows = stream
     |> Stream.drop(1)
-    |> Stream.map(fn row ->
+    |> Stream.map(fn row -> # maybe we get rid of this and push it into a Masseuse step?
       Enum.map(row, &convert_type/1)
     end)
-    |> Stream.map(fn row ->
-      Enum.zip(headers, row)
-      |> Enum.into(%{})
-    end)
-    {:ok, result}
+    |> Stream.map(&List.to_tuple/1)
+    # it might be useful to check the row lengths and header length are all equal here as well
+    {:ok, %Liberdata.Table{headers: headers, rows: rows}}
   end
 
   def download(url) do
