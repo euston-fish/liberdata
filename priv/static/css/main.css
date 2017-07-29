@@ -1,0 +1,19 @@
+h1.title {
+  padding-top: 15vh;
+  font-size: 3em;
+  text-align: center;
+}
+
+h1 .subtitle {
+  color: #666;
+}
+
+.emojis {
+  font-size: 10em;
+  width: 100%;
+  text-align: center;
+}
+
+.arrow {
+  color: #666;
+}
