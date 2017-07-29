@@ -17,15 +17,14 @@ defmodule Liberdata.Decoder do
     end)
     |> Stream.filter(fn line -> line != nil end)
 
-    headers = List.to_tuple(Enum.at(stream, 0))
+    headers = Enum.at(stream, 0)
     rows = stream
     |> Stream.drop(1)
     |> Stream.map(fn row -> # maybe we get rid of this and push it into a Masseuse step?
       Enum.map(row, &convert_type/1)
     end)
-    |> Stream.map(&List.to_tuple/1)
-    # it might be useful to check the row lengths and header length are all equal here as well
-    {:ok, %Liberdata.Table{headers: headers, rows: rows}}
+    |> Stream.map(&%Liberdata.Row{data: Enum.zip(headers, &1) |> Enum.into(%{})})
+    {:ok, %Liberdata.Rows{rows: rows}}
   end
 
   def get_by_url(url) do
