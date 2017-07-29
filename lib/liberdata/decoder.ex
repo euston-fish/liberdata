@@ -1,5 +1,5 @@
 defmodule Liberdata.Decoder do
-  def decode(url, type), do: decode_csv(url)
+  def decode(url, "csv"), do: decode_csv(url)
   def decode(_, unknown_type), do: {:err, "Unknown type #{unknown_type}"}
 
   def decode_csv(url) do
