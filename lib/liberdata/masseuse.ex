@@ -6,9 +6,21 @@ defmodule Liberdata.Masseuse do
     papply(table, commands)
   end
 
-  defp papply(table, ["strip", key]) do
+  defp papply(table, ["strip", key | rest]) do
     table
     |> map(key, &String.trim/1)
+    |> papply(rest)
+  end
+
+  defp papply(table, ["filter", key, value | rest]) do
+    table
+    |> filter(key, MapSet.new([value]))
+    |> papply(rest)
+  end
+
+  defp papply(table, ["count"]) do
+    table
+    |> count()
   end
 
   defp papply(table, _) do
@@ -31,6 +43,10 @@ defmodule Liberdata.Masseuse do
       headers: headers, 
       rows: rows |> Stream.map(&put_elem(&1, col_index, f.(elem(&1, col_index))))
     }
+  end
+
+  def count(%Liberdata.Table{rows: rows}) do
+    rows |> Enum.count()
   end
 
   defp column_index(headers, key), do: Enum.find_index(Tuple.to_list(headers), &(key==&1))

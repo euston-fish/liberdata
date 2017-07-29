@@ -8,10 +8,12 @@ defmodule Liberdata.Decoder do
       error -> throw error
     end
     |> String.split("\n")
+    |> Stream.filter(fn line -> String.trim(line) != "" end)
     |> CSV.decode
     |> Stream.map(fn
       {:ok, line} -> line
       {:error, _line} -> nil
+      row when is_list(row) -> row
     end)
     |> Stream.filter(fn line -> line != nil end)
 
