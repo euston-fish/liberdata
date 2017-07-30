@@ -17,8 +17,9 @@ defmodule Liberdata.Commands do
           unquote(body)
         end).()
         |> case do
-          {rows, rest} -> apply([rows | rest])
-          rows -> apply([rows | unquote(rest_var)])
+          {:ok, rows, rest} -> apply([rows | rest])
+          {:ok, rows} -> apply([rows | unquote(rest_var)])
+          {:err, msg} -> {:err, msg}
         end
       end
     end
@@ -56,7 +57,7 @@ defmodule Liberdata.Commands do
       end
 
       def apply(_) do
-        {:err, "bad command sequence"}
+        {:err, "Bad command sequence"}
       end
     end
   end

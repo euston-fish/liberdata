@@ -4,40 +4,44 @@ defmodule Liberdata.Applicator do
   use Commands
 
   doc :load, """
-  things
+  Load a resource of a certain type. This should be the first part of the URL, 
+  and the resource path should be escaped using standard URL encoding.
+
+  You can use the example file from: `https://liberdata.tech/` 
+
+  eg:
+  ```
+  /load/csv/https%3A%2F%2Fpeople.sc.fsu.edu%2F~jburkardt%2Fdata%2Fcsv%2Fhomes.csv
+  ```
   """
   cmd ["load", type, resource] do
-    {:ok, rows} = Decoder.decode(resource, type)
-    rows
+    Decoder.decode(resource, type)
   end
 
   doc :filter, """
-  todo
+  Select certain rows from the data that match a predicate.
+  Supported operators are: `==`, `<`, `>`, `<=`, `>=`.
+
+  Find houses that have exactly five beds
+  ```
+  .../filter/Beds/==/5
+  ```
   """
   cmd [rows = %Rows{}, "filter"], rest do
     {f, rest} = filter(["or" | rest])
     rows = Rows.filter(rows, f) 
-    {rows, rest}
-  end
-
-  doc :trim, """
-  todo
-  """
-  cmd [rows = %Rows{}, "trim", key] do
-    Rows.map(rows, fn %Row{data: data} ->
-      {_, data} = Map.get_and_update(data, key, fn
-        nil -> :pop
-        value -> {nil, String.trim(value)}
-      end)
-      %Row{data: data}
-    end)
+    {:ok, rows, rest}
   end
 
   doc :count, """
-  todo
+  Get the count of the number of rows in the dataset.
+
+  ```
+  .../count
+  ```
   """
   cmd [%Rows{rows: rows}, "count"] do
-    %Rows{rows:
+    rows = %Rows{rows:
       [
         %Row{data:
           %{count:
@@ -46,8 +50,8 @@ defmodule Liberdata.Applicator do
         }
       ]
     }
+    {:ok, rows}
   end
-
 
   for operator <- [:==, :<, :>, :<=, :>=] do
     IO.puts "Compiling #{operator}"

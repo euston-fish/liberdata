@@ -14,5 +14,5 @@
 </div>
 
 <div class="documentation">
-  <%= Phoenix.HTML.raw Liberdata.CommandDocs.documentation() %>
+  <%= Phoenix.HTML.raw Liberdata.Applicator.documentation() %>
 </div> 
