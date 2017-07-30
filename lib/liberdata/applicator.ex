@@ -7,11 +7,11 @@ defmodule Liberdata.Applicator do
   Load a resource of a certain type. This should be the first part of the URL, 
   and the resource path should be escaped using standard URL encoding.
 
-  You can use the example file from: `https://liberdata.tech/` 
+  You can use the example file from: `https://liberdata.tech/example.csv` 
 
   eg:
   ```
-  /load/csv/https%3A%2F%2Fpeople.sc.fsu.edu%2F~jburkardt%2Fdata%2Fcsv%2Fhomes.csv
+  /api/load/csv/https%3A%2F%2Fliberdata.tech%2Fexample.csv
   ```
   """
   cmd ["load", type, resource] do
