@@ -47,13 +47,6 @@ defmodule Liberdata.Applicator do
     {:ok, rows}
   end
 
-  doc :select, """
-
-  """
-  cmd [rows = %Rows{}, "select", columns] do
-
-  end
-
   doc :sum, """
   Sum a column of numbers. Non-numeric values are counted as `0`.
 
