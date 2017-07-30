@@ -19,6 +19,13 @@ liberdata = function() {
     this.commands.push(value);
     return this;
   };
+  this.or = function(key, operator, value) {
+    this.commands.push("or");
+    this.commands.push(key);
+    this.commands.push(operator);
+    this.commands.push(value);
+    return this;
+  };
   this.count = function() {
     this.commands.push("count");
     return this;
