@@ -30,5 +30,6 @@
 </div> 
 
 <div class="footer">
+  <p>Look at the source<br><a href="https://github.com/javanut13/liberdata"><img style="width: 3em; height: 3em;" src="/images/github.png"></img></a></p>
   <p>Brought to you by <a href="https://euston.fish/">euston.fish</a> 🐟 </p>
 </div>
