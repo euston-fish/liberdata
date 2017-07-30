@@ -28,3 +28,7 @@
   <h2>Commands</h2>
   <%= Phoenix.HTML.raw Liberdata.Applicator.documentation() %>
 </div> 
+
+<div class="footer">
+  <p>Brought to you by <a href="https://euston.fish/">euston.fish</a> 🐟 </p>
+</div>
