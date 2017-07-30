@@ -41,16 +41,31 @@ defmodule Liberdata.Applicator do
   ```
   """
   cmd [%Rows{rows: rows}, "count"] do
-    rows = %Rows{rows:
-      [
-        %Row{data:
-          %{count:
-            Enum.count(rows)
-          }
-        }
-      ]
-    }
+    rows = rows
+    |> Enum.count
+    |> Rows.scalar(:count)
     {:ok, rows}
+  end
+
+  doc :sum, """
+  Sum a column of numbers. Non-numeric values are counted as `0`.
+
+  ```
+  .../sum/my-column
+  ```
+  """
+  cmd [rows = %Rows{}, "sum", column] do
+    sum = rows
+    |> Rows.map(fn row -> Row.get(row, column) end)
+    |> Rows.filter(fn
+      num when is_number(num) -> num
+      _ -> 0
+    end)
+    |> Rows.unwrap
+    |> Enum.sum
+    |> Rows.scalar(:sum)
+
+    {:ok, sum}
   end
 
   opr :==, rhs, lhs, do: lhs == rhs
