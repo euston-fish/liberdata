@@ -41,6 +41,25 @@ defmodule Liberdata.Commands do
     end
   end
 
+  defmacro opr(name, lhs_var, rhs_var, do: body) do
+    quote do
+      defp filter(["or", key, unquote(Atom.to_string(name)), value | rest]) do
+        {f, rest} = filter(rest)
+        func = fn unquote(lhs_var), unquote(rhs_var) ->
+          unquote(body)
+        end
+        {
+          &(func.(Liberdata.Row.get(&1, key), Liberdata.Decoder.convert_type(value)) or f.(&1)),
+          rest
+        }
+      end
+    end
+  end
+  #defp filter(["or", key, unquote(Atom.to_string(operator)), value | rest]) do
+  #  {f, rest} = filter(rest)
+  #  {&(apply(Kernel, unquote(operator), [Row.get(&1, key), value]) or f.(&1)), rest}
+  #end
+
   defmacro __before_compile__(env) do
     html = Module.get_attribute(env.module, :commands)
     |> Enum.map(&format_command/1)
@@ -59,6 +78,8 @@ defmodule Liberdata.Commands do
       def apply(_) do
         {:err, "Bad command sequence"}
       end
+
+      defp filter(rest), do: {fn _ -> false end, rest}
     end
   end
 

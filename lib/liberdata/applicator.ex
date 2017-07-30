@@ -53,12 +53,9 @@ defmodule Liberdata.Applicator do
     {:ok, rows}
   end
 
-  for operator <- [:==, :<, :>, :<=, :>=] do
-    IO.puts "Compiling #{operator}"
-    defp filter(["or", key, unquote(Atom.to_string(operator)), value | rest]) do
-      {f, rest} = filter(rest)
-      {&(apply(Kernel, unquote(operator), [Row.get(&1, key), value]) or f.(&1)), rest}
-    end
-  end
-  defp filter(rest), do: {fn _ -> false end, rest}
+  opr :==, rhs, lhs, do: lhs == rhs
+  opr :<, rhs, lhs, do: lhs < rhs
+  opr :>, rhs, lhs, do: lhs > rhs
+  opr :<=, rhs, lhs, do: lhs <=  rhs
+  opr :>=, rhs, lhs, do: lhs >=  rhs
 end
