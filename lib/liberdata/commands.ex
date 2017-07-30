@@ -55,13 +55,10 @@ defmodule Liberdata.Commands do
       end
     end
   end
-  #defp filter(["or", key, unquote(Atom.to_string(operator)), value | rest]) do
-  #  {f, rest} = filter(rest)
-  #  {&(apply(Kernel, unquote(operator), [Row.get(&1, key), value]) or f.(&1)), rest}
-  #end
 
   defmacro __before_compile__(env) do
     html = Module.get_attribute(env.module, :commands)
+    |> Enum.sort(fn attr1, attr2 -> attr1.name < attr2.name end)
     |> Enum.map(&format_command/1)
     |> Enum.join("---\n")
     |> Earmark.as_html!
