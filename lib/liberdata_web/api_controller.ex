@@ -4,7 +4,7 @@ defmodule LiberdataWeb.ApiController do
   alias Liberdata.{Applicator}
 
   def decode(conn, _params = %{"commands" => commands}) do
-    {status, resp} = Applicator.apply(commands, []) |> case do
+    {status, resp} = Applicator.apply(commands) |> case do
       {:ok, resp} -> {200, resp}
       {:err, message} -> {500, %{error: message}}
       _ -> {500, %{error: "cri"}}
