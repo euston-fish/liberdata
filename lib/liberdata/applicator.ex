@@ -41,24 +41,36 @@ defmodule Liberdata.Applicator do
   ```
   """
   cmd [%Rows{rows: rows}, "count"] do
-    rows = %Rows{rows:
-      [
-        %Row{data:
-          %{count:
-            Enum.count(rows)
-          }
-        }
-      ]
-    }
+    rows = rows
+    |> Enum.count
+    |> Rows.scalar(:count)
     {:ok, rows}
   end
 
-  for operator <- [:==, :<, :>, :<=, :>=] do
-    IO.puts "Compiling #{operator}"
-    defp filter(["or", key, unquote(Atom.to_string(operator)), value | rest]) do
-      {f, rest} = filter(rest)
-      {&(apply(Kernel, unquote(operator), [Row.get(&1, key), value]) or f.(&1)), rest}
-    end
+  doc :sum, """
+  Sum a column of numbers. Non-numeric values are counted as `0`.
+
+  ```
+  .../sum/my-column
+  ```
+  """
+  cmd [rows = %Rows{}, "sum", column] do
+    sum = rows
+    |> Rows.map(fn row -> Row.get(row, column) end)
+    |> Rows.filter(fn
+      num when is_number(num) -> num
+      _ -> 0
+    end)
+    |> Rows.unwrap
+    |> Enum.sum
+    |> Rows.scalar(:sum)
+
+    {:ok, sum}
   end
-  defp filter(rest), do: {fn _ -> false end, rest}
+
+  opr :==, rhs, lhs, do: lhs == rhs
+  opr :<, rhs, lhs, do: lhs < rhs
+  opr :>, rhs, lhs, do: lhs > rhs
+  opr :<=, rhs, lhs, do: lhs <=  rhs
+  opr :>=, rhs, lhs, do: lhs >=  rhs
 end

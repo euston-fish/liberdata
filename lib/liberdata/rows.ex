@@ -1,4 +1,5 @@
 defmodule Liberdata.Rows do
+  alias Liberdata.{Rows, Row}
   defstruct [:rows]
 
   def filter(%Liberdata.Rows{rows: rows}, f) do
@@ -7,6 +8,20 @@ defmodule Liberdata.Rows do
 
   def map(%Liberdata.Rows{rows: rows}, f) do
     %Liberdata.Rows{rows: Stream.map(rows, f)}
+  end
+
+  def unwrap(%Liberdata.Rows{rows: rows}), do: rows
+
+  def scalar(value, name) do
+    %Rows{rows:
+      [
+        %Row{data:
+          %{
+            name => value
+          }
+        }
+      ]
+    }
   end
 end
 
