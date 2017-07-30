@@ -13,10 +13,16 @@
   Liberdata acts as an intelligent proxy for many different forms of data.
 </div>
 
+<hr>
+
 <div class="demo">
-  <p data-height="265" data-theme-id="0" data-slug-hash="mMVmaw" data-default-tab="js,result" data-user="logan12358" data-embed-version="2" data-pen-title="liberdata.js" class="codepen">See the Pen <a href="https://codepen.io/logan12358/pen/mMVmaw/">liberdata.js</a> by Logan (<a href="https://codepen.io/logan12358">@logan12358</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+  <h2>Demo</h2>
+  <p>Just <pre style="display: inline;">&lt;script src="https://liberdata.tech/liberdata.js"&gt;&lt;/script&gt;</pre> and then use <pre style="display: inline;">liberdata</pre></p>
+  <p data-height="361" data-theme-id="0" data-slug-hash="mMVmaw" data-default-tab="js,result" data-user="logan12358" data-embed-version="2" data-pen-title="liberdata.js" class="codepen">See the Pen <a href="https://codepen.io/logan12358/pen/mMVmaw/">liberdata.js</a> by Logan (<a href="https://codepen.io/logan12358">@logan12358</a>) on <a href="https://codepen.io">CodePen</a>.</p>
   <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 </div>
+
+<hr>
 
 <div class="documentation">
   <h2>Commands</h2>
