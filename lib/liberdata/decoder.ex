@@ -1,5 +1,4 @@
 defmodule Liberdata.Decoder do
-  require IEx
   def decode(url, "csv"), do: decode_csv(url)
   def decode(_, unknown_type), do: {:err, "Unknown type #{unknown_type}"}
 
@@ -24,7 +23,6 @@ defmodule Liberdata.Decoder do
     rows = stream
     |> Stream.drop(1)
     |> Stream.map(fn row -> # maybe we get rid of this and push it into a Masseuse step?
-      IEx.pry
       Enum.map(row, &convert_type/1)
     end)
     |> Stream.map(&%Liberdata.Row{data: Enum.zip(headers, &1) |> Enum.into(%{})})
